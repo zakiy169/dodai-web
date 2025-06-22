@@ -3,92 +3,318 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dodai - Streaming Anime Gratis</title>
+<title>Dodai Streaming Anime</title>
 <style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
   body {
-    background-color: #0a0f2c;
-    color: #a0c8ff;
-    font-family: Arial, sans-serif;
     margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0b1437;
+    color: #a2c9ff;
+  }
+  a {
+    color: #70aaff;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
   }
   header {
-    background-color: #15294a;
+    background-color: #16224f;
     padding: 20px;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: #88baff;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  nav {
+    display: flex;
+    gap: 20px;
+  }
+  nav a {
+    font-weight: 600;
   }
   main {
-    padding: 20px;
-    max-width: 800px;
-    margin: auto;
+    max-width: 960px;
+    margin: 25px auto;
+    padding: 0 15px 40px 15px;
   }
-  h2 {
-    color: #a0c8ff;
+  .anime-info {
+    margin-bottom: 20px;
   }
-  .anime-list {
+  .anime-info h2 {
+    margin-bottom: 8px;
+    border-bottom: 2px solid #3059a5;
+    padding-bottom: 8px;
+  }
+  .anime-info p {
+    color: #c0d5ff;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .video-player {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 15px #2a3e7e;
+  }
+  .video-player iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .episode-section {
+    margin-bottom: 40px;
+  }
+  .episode-section h3 {
+    margin-bottom: 15px;
+    color: #90b7ff;
+  }
+  ul.episode-list {
     list-style: none;
     padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+    gap: 15px;
   }
-  .anime-list li {
-    background-color: #1b2b5c;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 8px;
+  ul.episode-list li {
+    background-color: #1c2b69;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
   }
-  .anime-list a {
-    color: #cce4ff;
-    text-decoration: none;
-    font-weight: bold;
+  ul.episode-list li:hover {
+    background-color: #3059a5;
   }
-  .watch-btn {
-    display: inline-block;
-    margin-top: 8px;
-    padding: 8px 15px;
-    background-color: #4a90e2;
-    color: white;
+  ul.episode-list li img {
+    width: 80px;
+    height: 45px;
+    object-fit: cover;
     border-radius: 6px;
-    text-decoration: none;
+    flex-shrink: 0;
+  }
+  ul.episode-list li span {
+    font-weight: 600;
+    color: #a2c9ff;
+  }
+  #comments {
+    background-color: #16224f;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  #comments h3 {
+    margin-top: 0;
+    color: #90b7ff;
+    margin-bottom: 20px;
+  }
+  .comment {
+    border-bottom: 1px solid #3059a5;
+    padding: 12px 0;
+  }
+  .comment:last-child {
+    border-bottom: none;
+  }
+  .comment .name {
+    font-weight: 700;
+    color: #a2c7ff;
+  }
+  .comment .text {
+    margin-top: 6px;
+  }
+  form#comment-form input,
+  form#comment-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    background-color: #0b1437;
+    color: #a2c9ff;
+  }
+  form#comment-form button {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background-color: #3059a5;
+    border: none;
+    border-radius: 10px;
+    color: #a2c9ff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  form#comment-form button:hover {
+    background-color: #1b2d66;
   }
   footer {
-    background-color: #15294a;
     text-align: center;
-    padding: 15px;
-    color: #88baff;
-    margin-top: 30px;
+    color: #6387d9;
+    font-size: 0.9rem;
+    padding: 15px 0;
+    margin-top: 40px;
   }
   @media (max-width: 600px) {
-    body {
-      font-size: 14px;
-    }
     header {
-      font-size: 1.5rem;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+    }
+    ul.episode-list {
+      grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+    }
+    ul.episode-list li img {
+      width: 60px;
+      height: 34px;
     }
   }
 </style>
 </head>
 <body>
-<header>Dodai - Streaming Anime Gratis</header>
+<header>
+  <h1>Dodai Streaming Anime</h1>
+  <nav>
+    <a href="#player">Player</a>
+    <a href="#episodes">Episode</a>
+    <a href="#comments">Komentar</a>
+    <a href="https://saweria.co/zakiy" target="_blank" rel="noopener noreferrer">Saweria</a>
+  </nav>
+</header>
 <main>
-  <h2>Anime Populer</h2>
-  <ul class="anime-list">
-    <li>
-      <a href="https://doodstream.com/e/onepiece" target="_blank" rel="noopener noreferrer">One Piece</a><br/>
-      <a href="https://doodstream.com/e/onepiece" target="_blank" rel="noopener noreferrer" class="watch-btn">Tonton Sekarang</a>
-    </li>
-    <li>
-      <a href="https://doodstream.com/e/horimiya" target="_blank" rel="noopener noreferrer">Horimiya</a><br/>
-      <a href="https://doodstream.com/e/horimiya" target="_blank" rel="noopener noreferrer" class="watch-btn">Tonton Sekarang</a>
-    </li>
-    <li>
-      <a href="https://doodstream.com/e/komisan" target="_blank" rel="noopener noreferrer">Komi-san wa Komyushou Desu</a><br/>
-      <a href="https://doodstream.com/e/komisan" target="_blank" rel="noopener noreferrer" class="watch-btn">Tonton Sekarang</a>
-    </li>
-  </ul>
+  <section class="anime-info" id="player">
+    <h2>Gimai Seikatsu Sub Indo</h2>
+    <p>Anime romance slice of life tentang kisah dua gadis yang tinggal bersama dengan cerita menarik dan penuh emosi.</p>
+    <div class="video-player">
+      <iframe src="https://doodstream.com/embed/6c50qw36r9b9" allowfullscreen></iframe>
+    </div>
+  </section>
+  <section class="episode-section" id="episodes">
+    <h3>Daftar Episode</h3>
+    <ul class="episode-list" id="episodeList"></ul>
+  </section>
+  <section id="comments">
+    <h3>Komentar</h3>
+    <div id="commentContainer"></div>
+    <form id="comment-form">
+      <input type="text" id="name" name="name" placeholder="Nama" required />
+      <textarea id="comment" name="comment" placeholder="Tulis komentar kamu" rows="4" required></textarea>
+      <button type="submit">Kirim Komentar</button>
+    </form>
+  </section>
 </main>
 <footer>
-  &copy; 2025 Dodai. All rights reserved.
+  &copy; 2025 Dodai. All rights reserved. | <a href="https://saweria.co/zakiy" target="_blank" rel="noopener noreferrer">Saweria</a>
 </footer>
+<script>
+  const videoLinks = [
+    {
+      id: "ep1",
+      title: "Episode 1",
+      thumb: "https://via.placeholder.com/80x45?text=Ep1",
+      src: "https://doodstream.com/embed/6c50qw36r9b9"
+    },
+    {
+      id: "ep2",
+      title: "Episode 2",
+      thumb: "https://via.placeholder.com/80x45?text=Ep2",
+      src: "https://doodstream.com/embed/8k23np4r7p6m"
+    },
+    {
+      id: "ep3",
+      title: "Episode 3",
+      thumb: "https://via.placeholder.com/80x45?text=Ep3",
+      src: "https://doodstream.com/embed/9hs29s6bvmno"
+    },
+    {
+      id: "ep4",
+      title: "Episode 4",
+      thumb: "https://via.placeholder.com/80x45?text=Ep4",
+      src: "https://doodstream.com/embed/x74mr6nvqp0t"
+    },
+    {
+      id: "ep5",
+      title: "Episode 5",
+      thumb: "https://via.placeholder.com/80x45?text=Ep5",
+      src: "https://doodstream.com/embed/wm39q7psxr6l"
+    }
+  ];
+
+  function loadEpisodes() {
+    const ul = document.getElementById('episodeList');
+    videoLinks.forEach(video => {
+      const li = document.createElement('li');
+      li.innerHTML = `<img src="${video.thumb}" alt="${video.title}"/><span>${video.title}</span>`;
+      li.addEventListener('click', () => changeVideo(video.src));
+      ul.appendChild(li);
+    });
+  }
+
+  function changeVideo(src) {
+    const iframe = document.querySelector('.video-player iframe');
+    iframe.src = src;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // Comments feature with localStorage
+  const commentForm = document.getElementById('comment-form');
+  const commentContainer = document.getElementById('commentContainer');
+
+  function loadComments() {
+    const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+    commentContainer.innerHTML = '';
+    comments.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'comment';
+      div.innerHTML = `<div class="name">${escapeHTML(c.name)}</div><div class="text">${escapeHTML(c.text)}</div>`;
+      commentContainer.appendChild(div);
+    });
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"']/g, function(m) {
+      return ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[m];
+    });
+  }
+
+  commentForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = commentForm.name.value.trim();
+    const text = commentForm.comment.value.trim();
+    if(name && text) {
+      const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+      comments.push({name, text});
+      localStorage.setItem('comments', JSON.stringify(comments));
+      commentForm.reset();
+      loadComments();
+      window.scrollTo({top: document.getElementById('comments').offsetTop, behavior: 'smooth'});
+    }
+  });
+
+  loadEpisodes();
+  loadComments();
+</script>
 </body>
 </html>
